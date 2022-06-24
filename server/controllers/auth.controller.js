@@ -22,6 +22,8 @@ exports.signup = async (req, res) => {
 };
 
 exports.signin = async (req, res) => {
+  //console.log(req.body);
+
   const user = await Users.findOne({
     where: { email: req.body.email },
   });
@@ -42,12 +44,22 @@ exports.signin = async (req, res) => {
       });
     }
 
-    const token = jwt.sign({ id: user.id }, config.secret, {
-      expiresIn: 84000, //24hours
-    });
-
+    const token = jwt.sign(
+      {
+        id: user.id,
+        email: user.email,
+        suscription: user.suscripcion,
+        preference: user.preference_id,
+      },
+      config.secret,
+      {
+        expiresIn: 84000, //24hours
+      }
+    );
+    console.log("TOKEN", token);
     req.session.token = token;
-    console.log(req.session);
+    //console.log(req.session);
+    //localStorage.setItem("user", token);
 
     return res.status(200).send({
       isLogged: true,
@@ -58,7 +70,7 @@ exports.signin = async (req, res) => {
       token,
     });
   } catch (error) {
-    console.log(error);
+    console.log(error.message);
   }
 };
 

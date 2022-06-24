@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import "../App.css";
+import authHeader from "../services/auth-header";
+import authServices from "../services/auth.services";
+import axios from "axios";
 
 export default function Login() {
   const [user, setUser] = useState(null);
@@ -39,49 +42,39 @@ export default function Login() {
     notify();
   }, []);
 
-  async function tokenAvailable() {
-    const user = await fetch("http://localhost:3000/user", {
-      method: "GET",
-      mode: "cors",
-      headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
-      },
-      credentials: "same-origin",
+  async function tokenAvailable(token) {
+    //const header = authHeader();
+    // const user = await fetch("http://localhost:3000/user", {
+    //   method: "GET",
+    //   mode: "cors",
+    //   headers: authHeader(),
+    //   // headers: {
+    //   //   "x-access-token": token,
+    //   // },
+    //   credentials: "same-origin",
+    // });
+
+    const user = await axios.get("http://localhost:3000/user", {
+      headers: authHeader(),
     });
 
-    const response = await user.json();
-    setUser(await response);
-    console.log(await response);
-    return response;
+    const response = await user;
+    setUser(response.data);
+    console.log(response);
+    return response.data;
   }
   //tokenAvailable();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("http://localhost:3000/signin", {
-        method: "POST",
-        mode: "cors",
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-        },
-        credentials: "same-origin",
-        body: JSON.stringify({
-          email,
-          password,
-        }),
-      });
-      const data = await response.json();
-      console.log(data);
+      //POST to /signin
+      const data = await authServices.login(email, password);
 
       if (data.isLogged && data.suscripcion === true && data.token) {
-        localStorage.setItem("token", data.token);
-
+        await tokenAvailable(data.token);
+        //console.log(localStorage.getItem("user"));
         //localStorage.token ? tokenAvailable() : console.log("NO HAY TOKEN");
-        await tokenAvailable();
-
         //navigate(`/masthead/${email}&${data.isLogged}&${data.id}`);
       } else if (data.isLogged && data.suscripcion === false) {
         navigate("/suscripcion", {
