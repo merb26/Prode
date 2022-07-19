@@ -59,9 +59,19 @@ app.post("/pronosticos", async (req, res) => {
       userId: req.body.userId,
     });
 
+    //console.log("PRONOSTICO", req.body);
     res.send("Enviado");
   } catch (err) {
-    console.log(err);
+    console.log("ERROR en POST /pronosticos", err.message);
+  }
+});
+
+app.get("/pronosticos", async (req, res) => {
+  try {
+    const usersPronostico = await Pronostico.findAll();
+    res.send(usersPronostico);
+  } catch (error) {
+    console.log(error);
   }
 });
 

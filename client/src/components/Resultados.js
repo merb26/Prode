@@ -1,19 +1,16 @@
+import { useEffect, useState } from "react";
 import "../App.css";
 
-const user = {
-  name: "Agustin",
-  resultados: {
-    fifaid: "300438238",
-    winner: "Senegal",
-    goalshome: "4",
-    goalsaway: "1",
-  },
-  points: 0,
-};
+const testMatch = [
+  { id: 391881, winner: "Netherlands", goalHome: 1, goalAway: 2 },
+  { id: 391882, winner: "Ecuador", goalHome: 1, goalAway: 2 },
+];
 
 const apiToken = "cfccda3b57e4496d884919c349c9f8a7";
 
-const Resultados = () => {
+const Resultados = (props) => {
+  const [results, setResults] = useState(0);
+
   async function fetchData() {
     try {
       const data = await fetch(
@@ -29,25 +26,37 @@ const Resultados = () => {
     }
   }
 
+  useEffect(() => {
+    const getData = async () => {
+      const response = await fetch("http://localhost:3000/pronosticos");
+
+      const data = await response.json();
+      console.log(data);
+      setResults(data);
+    };
+    getData();
+  }, []);
+
   async function evaluateResponse() {
-    const exam = await fetchData();
-    console.log(exam);
-    if (user.resultados.winner === exam.matches[0].homeTeam.name) {
-      user.points++;
-      console.log(user);
+    const userBet = await results.filter(
+      (result) => result.userId === props.id
+    );
+    console.log("USERBET", userBet);
+
+    let aux;
+    for (let i = 0; i < testMatch.length; i++) {
+      // console.log(
+      //   "LOG",
+      //   await userBet.filter((el) => el.matchId == testMatch[i].id)[0]
+      // );
+      aux.push(await userBet.filter((el) => el.matchId == testMatch[i].id)[0]);
+      console.log("AUX", aux);
     }
   }
 
-  evaluateResponse();
+  console.log(Promise.all(evaluateResponse()));
 
-  //   if (user.resultados.fifaid === data().fifa_id) {
-  //     if (user.resultados.winner === data().winner) {
-  //       user.points++;
-  //       console.log("PUNTOS", user.points);
-  //     }
-  //   }
-
-  return <div></div>;
+  return <div>{evaluateResponse}</div>;
 };
 
 export default Resultados;

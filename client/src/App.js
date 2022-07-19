@@ -17,6 +17,7 @@ import Pronostico from "./components/Pronostico";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Suscripcion from "./components/Suscripcion";
 import { useState } from "react";
+import Fechas from "./components/Fechas";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -26,14 +27,11 @@ function App() {
       <Router>
         <Routes>
           <Route path="/login" element={<Login />} />
-          <Route
-            exact
-            path={`/masthead/:user&:isLogged&:id`}
-            element={<Masthead />}
-          />
+          <Route exact path={`/masthead`} element={<Masthead />} />
           <Route exact path="/resultados" element={<Resultados />} />
           <Route exact path="/registro" element={<Registration />} />
           <Route exact path="/suscripcion" element={<Suscripcion />} />
+          <Route exact path="/fechas" element={<Fechas />} />
         </Routes>
       </Router>
 

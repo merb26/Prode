@@ -307,12 +307,16 @@ svg {
 .home-img{
   float: left;
     left: 0;
-    border-radius: 5px 5px 5px 30px;
+    
 }
 .away-img{
   float: right;
     right: 0;
-    border-radius: 5px 5px 30px 5px;
+    
+}
+
+.containerCarrousel{
+  display: flex;
 }
 
 table {

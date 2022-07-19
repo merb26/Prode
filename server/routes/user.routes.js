@@ -9,7 +9,7 @@ module.exports = function (app) {
   app.get(
     "/user",
     [authJwt.verifyToken],
-    (req, res) => res.send("ACCESO OK")
+    (req, res) => res.send(true)
 
     //console.log(`VERIFY TOKEN ${authJwt.verifyToken}`);
   );

@@ -1,8 +1,16 @@
 import "../App.css";
-import Masthead from "./Masthead";
-import Registration from "./Registration";
+
+import { useNavigate } from "react-router-dom";
 
 function Navigation() {
+  const userLogged = localStorage.getItem("user");
+  const navigate = useNavigate();
+
+  const handleLogOut = () => {
+    localStorage.removeItem("user");
+    navigate("/login");
+  };
+
   return (
     <>
       <nav
@@ -37,9 +45,15 @@ function Navigation() {
                 <a className="nav-link" /*href="#contact"*/>Contacto</a>
               </li>
               <li className="nav-item">
-                <a className="nav-link" href="#registro">
-                  Registro
-                </a>
+                {userLogged ? (
+                  <a className="nav-link" onClick={handleLogOut}>
+                    Logout
+                  </a>
+                ) : (
+                  <a className="nav-link" href="#registro">
+                    Registro
+                  </a>
+                )}
               </li>
             </ul>
           </div>

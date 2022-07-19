@@ -24,6 +24,7 @@ const Users = db.define("users", {
 const Pronostico = db.define("pronosticos", {
   matchId: {
     type: DataTypes.STRING,
+    unique: true,
   },
   winner: {
     type: DataTypes.STRING,
@@ -64,7 +65,7 @@ const Pronostico = db.define("pronosticos", {
 
 //RELATIONSHIPS
 
-Users.hasMany(Pronostico /*{ as: "pronosticos" }*/);
-Pronostico.belongsTo(Users);
+Users.hasMany(Pronostico, { as: "pronosticos" });
+Pronostico.belongsTo(Users, { foreignKey: "userId", as: "user" });
 
-module.exports = { Users, Pronostico /* RefreshToken*/ };
+module.exports = { Users, Pronostico /*, RefreshToken*/ };

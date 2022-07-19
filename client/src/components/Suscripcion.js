@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import useScript from "../hooks/useScript";
 
 const FORM_ID = "payment-form";
 
@@ -9,7 +8,6 @@ export default function Suscripcion(props) {
   const id = 1122;
   const [preferenceId, setPreferenceId] = useState(null);
   const { state } = useLocation();
-  console.log(state);
 
   const PUBLIC_KEY_VENDEDOR_PRUEBA =
     "TEST-001debb2-d8d5-40a4-953f-8ca65aaa0fa0";

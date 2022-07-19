@@ -1,31 +1,93 @@
 import { useState, useEffect } from "react";
+import { Navigate, useLocation } from "react-router-dom";
 import "../App.css";
 import Contact from "./Contact";
-
 import Navigation from "./Navigation";
 import Pronostico from "./Pronostico";
+import Fechas from "./Fechas";
+import Resultados from "./Resultados";
 
 function Masthead() {
-  const [user, setUser] = useState(null);
+  const userLogged = localStorage.getItem("user");
+  const { state } = useLocation();
+  let userId;
 
-  // useEffect(() => {
-  //   async function tokenAvailable() {
-  //     const user = await fetch("http://localhost:3000/user", {
-  //       method: "GET",
-  //       mode: "cors",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //         "Access-Control-Allow-Origin": "*",
-  //       },
-  //     });
+  state ? (userId = state.id) : (userId = undefined);
 
-  //     const response = await user.json();
-  //     setUser(response);
-  //   }
-  //   tokenAvailable();
-  // }, []);
+  const apiToken = "cfccda3b57e4496d884919c349c9f8a7";
+  const urlMatches = "https://api.football-data.org/v2/competitions/WC/matches";
+  const urlTeams = "https://api.football-data.org/v2/competitions/WC/teams";
+  const urlFlags = "https://flagcdn.com/en/codes.json";
+  const stage = [
+    "GROUP_STAGE",
+    "LAST_16",
+    "QUARTER_FINALS",
+    "SEMI_FINALS",
+    "FINAL",
+  ];
 
-  return (
+  const [teams, setTeams] = useState([]);
+  const [matches, setMatches] = useState([]);
+  const [groupMatches, setGroupMatches] = useState([]);
+
+  const [getImg, setGetImg] = useState("");
+
+  const getFlags = async (name) => {
+    const flags = await fetch(urlFlags);
+    const data = await flags.json();
+
+    const list = Object.entries(data);
+    const code = list.filter((flag) => flag[1] === name)[0][0];
+
+    return code;
+  };
+
+  useEffect(() => {
+    const fetchMatches = async () => {
+      try {
+        const response = await fetch(urlMatches, {
+          headers: { "X-Auth-Token": `${apiToken}` },
+        });
+
+        const json = await response.json();
+
+        setMatches(await json);
+        setGroupMatches(
+          await json.matches.filter((matches) => matches.stage === stage[0])
+        );
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchMatches();
+
+    const fetchTeams = async () => {
+      try {
+        const response2 = await fetch(urlTeams, {
+          headers: { "X-Auth-Token": `${apiToken}` },
+        });
+        const json2 = await response2.json();
+        console.log(json2);
+
+        setTeams(await json2);
+
+        const codeState = json2.teams.map(async (url) => ({
+          id: url.id,
+          url:
+            "https://flagcdn.com/32x24/" + (await getFlags(url.name)) + ".png",
+        }));
+
+        const flagURL = await Promise.all(codeState);
+        console.log(flagURL);
+        setGetImg(flagURL);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchTeams();
+  }, []);
+
+  return userLogged ? (
     <>
       <Navigation />
       <header className="masthead">
@@ -47,11 +109,23 @@ function Masthead() {
             </div>
           </div>
         </div>
+        <div className="masthead">
+          <div className="container px-4 px-lg-5 h-100">
+            <Pronostico
+              id={userId}
+              groupMatches={groupMatches}
+              teams={teams}
+              getImg={getImg}
+            />
+          </div>
+        </div>
+        <Fechas getImg={getImg} />
         <Contact />
+        <Resultados id={userId} />
       </header>
-      {/* <Navigation /> */}
-      {/* <Pronostico /> */}
     </>
+  ) : (
+    (console.log("NAVIGATE"), (<Navigate to="/login" />))
   );
 }
 

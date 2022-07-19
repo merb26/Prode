@@ -6,68 +6,81 @@ import Carousel from "react-bootstrap/Carousel";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 
-export default function Pronostico() {
-  const apiToken = "cfccda3b57e4496d884919c349c9f8a7";
-  const url = "https://api.football-data.org/v2/competitions/WC/matches";
-
-  const [teams, setTeams] = useState([]);
-  const [matches, setMatches] = useState([]);
-  const [groupMatches, setGroupMatches] = useState([]);
+export default function Pronostico(props) {
   const [results, setResults] = useState([
     { goalHome: "", goalAway: "", matchId: "", homeTeam: "", awayTeam: "" },
   ]);
-  const [getImg, setGetImg] = useState("");
 
-  const stage = [
-    "GROUP_STAGE",
-    "LAST_16",
-    "QUARTER_FINALS",
-    "SEMI_FINALS",
-    "FINAL",
-  ];
+  const [test, setTest] = useState([
+    { goalHome: "", goalAway: "", matchId: "", homeTeam: "", awayTeam: "" },
+  ]);
+  const [disable, setDisable] = useState(false);
+
   const groups = ["A", "B", "C", "D", "E", "F", "G", "H"];
 
-  let { id } = useParams();
+  // useEffect(() => {
+  //   const fetchMatches = async () => {
+  //     try {
+  //       const response = await fetch(url, {
+  //         headers: { "X-Auth-Token": `${apiToken}` },
+  //       });
 
-  useEffect(() => {
-    const fetchMatches = async () => {
-      try {
-        const response = await fetch(url, {
-          headers: { "X-Auth-Token": `${apiToken}` },
-        });
+  //       const json = await response.json();
 
-        const json = await response.json();
+  //       setMatches(await json);
 
-        setMatches(await json);
+  //       setGroupMatches(
+  //         await json.matches.filter((matches) => matches.stage === stage[0])
+  //       );
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   };
+  //   fetchMatches();
 
-        setGroupMatches(
-          await json.matches.filter((matches) => matches.stage === stage[0])
-        );
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    fetchMatches();
+  //   const fetchTeams = async () => {
+  //     try {
+  //       const response2 = await fetch(
+  //         "https://api.football-data.org/v2/competitions/WC/teams",
+  //         {
+  //           headers: { "X-Auth-Token": `${apiToken}` },
+  //         }
+  //       );
+  //       const json2 = await response2.json();
+  //       console.log(json2);
 
-    const fetchTeams = async () => {
-      try {
-        const response2 = await fetch(
-          "https://api.football-data.org/v2/competitions/WC/teams",
-          {
-            headers: { "X-Auth-Token": `${apiToken}` },
-          }
-        );
-        const json2 = await response2.json();
-        setTeams(await json2);
-        setGetImg(
-          await json2.teams.map((url) => ({ id: url.id, url: url.crestUrl }))
-        );
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    fetchTeams();
-  }, []);
+  //       setTeams(await json2);
+
+  //       const codeState = json2.teams.map(async (url) => ({
+  //         id: url.id,
+  //         url:
+  //           "https://flagcdn.com/32x24/" +
+  //           (await getFlags(url.name)) +
+  //           //(await codes.filter((code) => code[1] === url.name)[0][0]) +
+  //           ".png",
+  //       }));
+
+  //       const flagURL = await Promise.all(codeState);
+
+  //       console.log(await Promise.all(codeState));
+
+  //       setGetImg(flagURL);
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   };
+  //   fetchTeams();
+  // }, []);
+
+  // const getFlags = async (name) => {
+  //   const flags = await fetch("https://flagcdn.com/en/codes.json");
+  //   const data = await flags.json();
+
+  //   const list = Object.entries(data);
+  //   const code = list.filter((flag) => flag[1] === name)[0][0];
+
+  //   return code;
+  // };
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -107,9 +120,11 @@ export default function Pronostico() {
             goalAway: aux[i].goalAway,
             homeTeam: aux[i],
             awayTeam: aux[i],
-            userId: id,
+            userId: props.id,
           }),
         });
+
+        //setDisable(true);
       }
       setResults([
         { goalHome: "", goalAway: "", matchId: "", homeTeam: "", awayTeam: "" },
@@ -126,27 +141,32 @@ export default function Pronostico() {
 
     const list = [...results, {}];
 
+    const list2 = (prev) => [...results];
+
     list[i][name] = value;
 
     list[i]["matchId"] = id;
     list[i]["homeTeam"] = home;
     list[i]["awayTeam"] = away;
-
+    console.log("LIST", list);
+    setTest(list2);
+    console.log("TEST", test);
     setResults(list);
   }
 
   function carrouselElement(group) {
-    const groupX = groupMatches.filter(
+    const groupX = props.groupMatches.filter(
       (matches) => matches.group === "GROUP_" + `${group}`
     );
 
     return (
-      teams &&
+      props.teams &&
+      props.getImg &&
       groupX.map((match, i) => (
         <li key={match.id} className="matches">
           <img
             className="home-img"
-            src={getImg
+            src={props.getImg
               .filter((img) => img.id === match.homeTeam.id)
               .map((url) => url.url)}
           />
@@ -181,7 +201,7 @@ export default function Pronostico() {
           />
           <img
             className="home-img"
-            src={getImg
+            src={props.getImg
               .filter((img) => img.id === match.awayTeam.id)
               .map((url) => url.url)}
           />
@@ -191,15 +211,19 @@ export default function Pronostico() {
   }
 
   return (
-    <Carousel interval={null}>
-      {groups.map((group) => (
-        <Carousel.Item>
-          <div className="container">
-            <ul>{carrouselElement(group)}</ul>
-            <button onClick={handleSubmit}>Enviar</button>
-          </div>
-        </Carousel.Item>
-      ))}
-    </Carousel>
+    <>
+      <Carousel interval={null}>
+        {groups.map((group) => (
+          <Carousel.Item>
+            <div className="containerCarrousel">
+              <ul>{carrouselElement(group)}</ul>
+              <button disabled={disable} onClick={handleSubmit}>
+                Enviar
+              </button>
+            </div>
+          </Carousel.Item>
+        ))}
+      </Carousel>
+    </>
   );
 }
