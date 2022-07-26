@@ -1,13 +1,14 @@
 import "../App.css";
-
 import { useNavigate } from "react-router-dom";
+import TokenServices from "../services/token.services";
 
 function Navigation() {
-  const userLogged = localStorage.getItem("user");
+  const userLogged = TokenServices.getLocalAccessToken; //localStorage.getItem("accessToken");
   const navigate = useNavigate();
 
   const handleLogOut = () => {
-    localStorage.removeItem("user");
+    TokenServices.removeUser();
+    //localStorage.removeItem("accessToken");
     navigate("/login");
   };
 

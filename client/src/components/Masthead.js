@@ -6,9 +6,12 @@ import Navigation from "./Navigation";
 import Pronostico from "./Pronostico";
 import Fechas from "./Fechas";
 import Resultados from "./Resultados";
+import AuthVerify from "../common/AuthVerify";
+import TokenServices from "../services/token.services";
 
 function Masthead() {
-  const userLogged = localStorage.getItem("user");
+  const userLogged = TokenServices.getLocalAccessToken(); //localStorage.getItem("accessToken");
+
   const { state } = useLocation();
   let userId;
 
@@ -122,6 +125,7 @@ function Masthead() {
         <Fechas getImg={getImg} />
         <Contact />
         <Resultados id={userId} />
+        <AuthVerify />
       </header>
     </>
   ) : (

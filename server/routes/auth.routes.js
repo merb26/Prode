@@ -12,4 +12,5 @@ module.exports = function (app) {
   app.post("/signup", verifySignUp.checkDuplicatedEmail, controller.signup);
   app.post("/signin", controller.signin);
   //app.post("/signout", controller.signout);
+  app.post("/refreshtoken", controller.refreshToken);
 };

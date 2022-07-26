@@ -50,7 +50,9 @@ export default function Fechas(props) {
                   )[0].url
                 }
               />
-              {match.homeTeam.name}vs{match.awayTeam.name}
+              {match.homeTeam.name}
+              <span>vs</span>
+              {match.awayTeam.name}
               <img
                 src={
                   props.getImg.filter(

@@ -4,16 +4,14 @@ import "../App.css";
 import authHeader from "../services/auth-header";
 import authServices from "../services/auth.services";
 import axios from "axios";
+import api from "../services/api";
 
 export default function Login() {
   const [user, setUser] = useState(false);
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
   const navigate = useNavigate();
   const [getParams] = useSearchParams();
-
   const payment_id = getParams.get("payment_id");
   const status = getParams.get("status");
   const preference_id = getParams.get("preference_id");
@@ -43,12 +41,10 @@ export default function Login() {
   }, []);
 
   async function tokenAvailable() {
-    const userLogged = await axios.get("http://localhost:3000/user", {
-      headers: authHeader(),
-    });
+    const userLogged = await /*axios*/ api.get("/user");
 
     setUser(await userLogged.data);
-    console.log(user);
+    console.log(userLogged.data);
     return userLogged.data;
   }
 
@@ -58,7 +54,9 @@ export default function Login() {
       //POST to /signin
       const data = await authServices.login(email, password);
 
-      if (data.isLogged && data.suscripcion === true && data.token) {
+      console.log("LOGINDATA", data);
+
+      if (data.isLogged && data.suscripcion === true && data.accessToken) {
         const loged = await tokenAvailable();
         console.log(await loged);
         //localStorage.token ? tokenAvailable() : console.log("NO HAY TOKEN");

@@ -40,15 +40,6 @@ app.options("/*", (_, res) => {
 require("../server/routes/auth.routes")(app);
 require("../server/routes/user.routes")(app);
 
-// app.get("/users", async (req, res) => {
-//   try {
-//     const all_users = await Users.findAll();
-//     res.json(all_users);
-//   } catch (err) {
-//     console.log(err);
-//   }
-// });
-
 app.post("/pronosticos", async (req, res) => {
   try {
     await Pronostico.create({
@@ -59,7 +50,6 @@ app.post("/pronosticos", async (req, res) => {
       userId: req.body.userId,
     });
 
-    //console.log("PRONOSTICO", req.body);
     res.send("Enviado");
   } catch (err) {
     console.log("ERROR en POST /pronosticos", err.message);

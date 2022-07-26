@@ -38,34 +38,42 @@ const Pronostico = db.define("pronosticos", {
 });
 
 //REFRESH TOKEN
-// const RefreshToken = db.define("refreshToken", {
-//   token: {
-//     type: DataTypes.STRING,
-//   },
-//   expiryDate: {
-//     type: DataTypes.DATE,
-//   },
-// });
+const RefreshToken = db.define("refreshTokens", {
+  token: {
+    type: DataTypes.STRING,
+  },
+  expiryDate: {
+    type: DataTypes.DATE,
+  },
+  // userId: {
+  //   type: DataTypes.STRING,
+  // },
+});
 
-// RefreshToken.createToken = async function (user) {
-//   let expiredAt = new Date();
-//   expiredAt.setSeconds(expiredAt.getSeconds() + config.jwtRefreshExpiration);
-//   let _token = uuidv4();
-//   let refreshToken = await this.create({
-//     token: _token,
-//     userId: user.id,
-//     expiryDate: expiredAt.getTime(),
-//   });
-//   return refreshToken.token;
-// };
+RefreshToken.createToken = async function (user) {
+  let expiredAt = new Date();
+  expiredAt.setSeconds(expiredAt.getSeconds() + config.jwtRefreshExpiration);
+  let _token = uuidv4();
 
-// RefreshToken.verifyExpiration = (token) => {
-//   return token.expiryDate.getTime() < new Date().getTime();
-// };
+  let refreshToken = await RefreshToken.create({
+    token: _token,
+    userId: user.id,
+    expiryDate: expiredAt.getTime(),
+  });
+  return refreshToken.token;
+};
+
+RefreshToken.verifyExpiration = (token) => {
+  console.log(token.expiryDate.getTime(), new Date().getTime());
+  return token.expiryDate.getTime() < new Date().getTime();
+};
 
 //RELATIONSHIPS
 
 Users.hasMany(Pronostico, { as: "pronosticos" });
 Pronostico.belongsTo(Users, { foreignKey: "userId", as: "user" });
 
-module.exports = { Users, Pronostico /*, RefreshToken*/ };
+//Users.hasOne(RefreshToken, { as: "user" });
+RefreshToken.belongsTo(Users, { foreignKey: "userId", as: "user" });
+
+module.exports = { Users, Pronostico, RefreshToken };
