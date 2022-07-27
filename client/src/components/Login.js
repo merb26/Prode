@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams, Navigate } from "react-router-dom";
 import "../App.css";
-import authHeader from "../services/auth-header";
 import authServices from "../services/auth.services";
 import axios from "axios";
 import api from "../services/api";
+import UserService from "../services/user.services";
 
 export default function Login() {
   const [user, setUser] = useState(false);
@@ -41,10 +41,10 @@ export default function Login() {
   }, []);
 
   async function tokenAvailable() {
-    const userLogged = await /*axios*/ api.get("/user");
+    const userLogged = await UserService.getUserLogged();
 
     setUser(await userLogged.data);
-    console.log(userLogged.data);
+    //console.log(userLogged.data);
     return userLogged.data;
   }
 
@@ -54,11 +54,11 @@ export default function Login() {
       //POST to /signin
       const data = await authServices.login(email, password);
 
-      console.log("LOGINDATA", data);
+      //console.log("LOGINDATA", data);
 
       if (data.isLogged && data.suscripcion === true && data.accessToken) {
         const loged = await tokenAvailable();
-        console.log(await loged);
+        //console.log(await loged);
         //localStorage.token ? tokenAvailable() : console.log("NO HAY TOKEN");
         navigate(`/masthead`, { state: { token: loged, id: data.id } });
       } else if (data.isLogged && data.suscripcion === false) {

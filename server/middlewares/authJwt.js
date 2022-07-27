@@ -13,8 +13,6 @@ const catchError = (err, res) => {
 
 verifyToken = async (req, res, next) => {
   let token = req.headers["x-access-token"]; /*|| req.session.token*/
-  console.log("REQ", req.headers);
-  console.log("VERIFYTOKEN", token);
 
   if (!token) {
     return res.status(403).send({

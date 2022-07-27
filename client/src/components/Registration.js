@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import authServices from "../services/auth.services";
 import "../App.css";
 
 export default function Registration() {
@@ -15,19 +16,27 @@ export default function Registration() {
     e.preventDefault();
 
     try {
-      const signUp = await fetch("http://localhost:3000/signup", {
-        method: "POST",
-        made: "cors",
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-        },
-        body: JSON.stringify({ name, lastname, sector, email, password }),
-      });
-      const response = await signUp.json();
-      console.log(response);
-      console.log(typeof response);
-      if (!response.used) {
+      // const signUp = await fetch("http://localhost:3000/signup", {
+      //   method: "POST",
+      //   made: "cors",
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //     "Access-Control-Allow-Origin": "*",
+      //   },
+      //   body: JSON.stringify({ name, lastname, sector, email, password }),
+      // });
+
+      const signUp = await authServices.signup(
+        name,
+        lastname,
+        sector,
+        email,
+        password
+      );
+
+      console.log(signUp);
+      console.log(typeof signUp);
+      if (!signUp.used) {
         console.log("usuario nuevo");
         navigate("/suscripcion", {
           state: { name, lastname, sector, email, password },

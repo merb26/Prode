@@ -21,6 +21,7 @@ function Masthead() {
   const urlMatches = "https://api.football-data.org/v2/competitions/WC/matches";
   const urlTeams = "https://api.football-data.org/v2/competitions/WC/teams";
   const urlFlags = "https://flagcdn.com/en/codes.json";
+  const urlFlagFormat = "https://flagcdn.com/32x24/";
   const stage = [
     "GROUP_STAGE",
     "LAST_16",
@@ -70,18 +71,16 @@ function Masthead() {
           headers: { "X-Auth-Token": `${apiToken}` },
         });
         const json2 = await response2.json();
-        console.log(json2);
-
+        //console.log(json2);
         setTeams(await json2);
 
         const codeState = json2.teams.map(async (url) => ({
           id: url.id,
-          url:
-            "https://flagcdn.com/32x24/" + (await getFlags(url.name)) + ".png",
+          url: urlFlagFormat + (await getFlags(url.name)) + ".png",
         }));
 
         const flagURL = await Promise.all(codeState);
-        console.log(flagURL);
+
         setGetImg(flagURL);
       } catch (error) {
         console.log(error);
@@ -124,12 +123,12 @@ function Masthead() {
         </div>
         <Fechas getImg={getImg} />
         <Contact />
-        <Resultados id={userId} />
+        {/* <Resultados id={userId} /> */}
         <AuthVerify />
       </header>
     </>
   ) : (
-    (console.log("NAVIGATE"), (<Navigate to="/login" />))
+    <Navigate to="/login" />
   );
 }
 

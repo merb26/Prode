@@ -1,5 +1,6 @@
 import axios from "axios";
 import TokenServices from "./token.services";
+import api from "./api";
 
 const API_URL = "http://localhost:3000/";
 
@@ -18,7 +19,7 @@ const login = async (email, password) => {
   //   }),
   // });
 
-  const response = await axios.post(API_URL + "signin", { email, password });
+  const response = await api.post("/signin", { email, password });
 
   if (response) {
     //localStorage.setItem("accessToken", response.accessToken);
@@ -28,6 +29,18 @@ const login = async (email, password) => {
   return response.data;
 };
 
-const authServices = { login };
+const signup = async (names, lastname, sector, email, password) => {
+  const signUp = await api.post("/signup", {
+    names,
+    lastname,
+    sector,
+    email,
+    password,
+  });
+
+  return signUp;
+};
+
+const authServices = { login, signup };
 
 export default authServices;
