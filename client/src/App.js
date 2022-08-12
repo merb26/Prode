@@ -23,26 +23,21 @@ function App() {
   const [user, setUser] = useState(null);
 
   return (
-    <body id="page-top">
-      <Router>
-        <Routes>
-          <Route path="/login" element={<Login />} />
-          <Route exact path={`/masthead`} element={<Masthead />} />
-          <Route exact path="/resultados" element={<Resultados />} />
-          <Route exact path="/registro" element={<Registration />} />
-          <Route exact path="/suscripcion" element={<Suscripcion />} />
-          <Route exact path="/fechas" element={<Fechas />} />
-        </Routes>
-      </Router>
-
-      {/* <Masthead />
-      <Navigation /> */}
-
-      {/* <Registration /> */}
-      {/* <Login /> */}
-      {/*<Contact /> */}
-      {/* <Pronostico /> */}
-    </body>
+    <>
+      <div id="page-top">
+        <Router>
+          <Routes>
+            <Route path="/login" element={<Login />} />
+            <Route exact path={`/masthead`} element={<Masthead />} />
+            <Route exact path="/resultados" element={<Resultados />} />
+            <Route exact path="/registro" element={<Registration />} />
+            <Route exact path="/suscripcion" element={<Suscripcion />} />
+            <Route exact path="/fechas" element={<Fechas />} />
+            <Route exact path="/pronosticos" element={<Pronostico />} />
+          </Routes>
+        </Router>
+      </div>
+    </>
   );
 }
 

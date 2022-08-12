@@ -7,6 +7,7 @@ const mercadopago = require("mercadopago");
 const PORT = process.env.PORT || 3000;
 const db = require("./models/index");
 const { Users, Pronostico } = require("./models/models");
+const emailSender = require("./controllers/contact.controller");
 const app = express();
 
 require("../server/middlewares/authJwt");
@@ -59,6 +60,16 @@ app.get("/pronosticos", async (req, res) => {
   } catch (error) {
     console.log(error);
   }
+});
+
+//CONTACT
+
+app.post("/contact", async (req, res) => {
+  console.log(
+    "EMAIL",
+    await emailSender.main(req.name, req.email, req.textarea)
+  );
+  res.send(await emailSender.main(req.name, req.email, req.textarea));
 });
 
 //MP INTEGRATION

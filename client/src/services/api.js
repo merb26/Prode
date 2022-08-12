@@ -31,11 +31,12 @@ instance.interceptors.request.use(
 
 instance.interceptors.response.use(
   (res) => {
+    console.log(res);
     return res;
   },
   async (err) => {
     const originalConfig = await err.config;
-
+    console.log("API", originalConfig);
     if (originalConfig.url !== "/signin" && err.response) {
       //Access Token expired
 

@@ -1,8 +1,8 @@
 import "../App.css";
-import { useNavigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import TokenServices from "../services/token.services";
 
-function Navigation() {
+function Navigation(props) {
   const userLogged = TokenServices.getLocalAccessToken; //localStorage.getItem("accessToken");
   const navigate = useNavigate();
 
@@ -37,13 +37,28 @@ function Navigation() {
                 <a className="nav-link" /*href="#about"*/>Reglas</a>
               </li>
               <li className="nav-item">
-                <a className="nav-link" /*href="#services"*/>Resultados</a>
+                <Link to="/resultados">
+                  <a className="nav-link" /*href="#services"*/>Resultados</a>
+                </Link>
               </li>
               <li className="nav-item">
                 <a className="nav-link" /*href="#portfolio"*/>Fechas</a>
               </li>
               <li className="nav-item">
                 <a className="nav-link" /*href="#contact"*/>Contacto</a>
+              </li>
+              <li className="nav-item">
+                <Link
+                  to="/pronosticos"
+                  state={{
+                    id: props.id,
+                    groupMatches: props.groupMatches,
+                    teams: props.teams,
+                    getImg: props.getImg,
+                  }}
+                >
+                  <a className="nav-link" /*href="#services"*/>Pronosticos</a>
+                </Link>
               </li>
               <li className="nav-item">
                 {userLogged ? (

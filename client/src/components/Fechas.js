@@ -41,7 +41,7 @@ export default function Fechas(props) {
         {today &&
           props.getImg &&
           today.map((match) => (
-            <li id={match.id} type="none">
+            <li key={match.id} type="none">
               <span>{match.group}</span>
               <img
                 src={

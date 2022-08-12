@@ -307,12 +307,17 @@ svg {
 .home-img{
   float: left;
     left: 0;
+    padding: 1%;
     
 }
 .away-img{
   float: right;
     right: 0;
     
+}
+
+.vs-text{
+  padding:1%
 }
 
 .containerCarrousel{
@@ -4747,6 +4752,11 @@ textarea.form-control-lg {
 
 .accordion-header {
   margin-bottom: 0;
+}
+
+.input-pronosticos {
+  padding:1%;
+  width:10%
 }
 
 .accordion-item {

@@ -1,9 +1,25 @@
 import { useState } from "react";
 import "../App.css";
+import axios from "axios";
 
 export default function Contact() {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
   const [textarea, setTextTarea] = useState("");
 
+  const handleSubmit = async () => {
+    const response = await axios.post("/contact", {
+      name,
+      email,
+      phone,
+      textarea,
+    });
+
+    if (response) {
+      console.log("Contacto Enviado");
+    }
+  };
   return (
     <>
       {/* <section className="page-section" id="contact"> */}
@@ -26,8 +42,12 @@ export default function Contact() {
                   className="form-control"
                   id="name"
                   type="text"
+                  value={name}
                   placeholder="Enter your name..."
                   data-sb-validations="required"
+                  onChange={(e) => {
+                    setName(e.target.value);
+                  }}
                 />
                 <label htmlFor="name">Nombre y Apellido</label>
                 <div
@@ -44,15 +64,13 @@ export default function Contact() {
                   id="email"
                   type="email"
                   placeholder="name@example.com"
+                  value={email}
                   data-sb-validations="required,email"
+                  onChange={(e) => {
+                    setEmail(e.target.value);
+                  }}
                 />
                 <label htmlFor="email">Email</label>
-                {/* <div className="invalid-feedback" data-sb-feedback="email:required">
-                  An email is required.
-                </div> */}
-                {/* <div className="invalid-feedback" data-sb-feedback="email:email">
-                  Email is not valid.
-                </div> */}
               </div>
               {/* <!-- Phone number input--> */}
               <div className="form-floating mb-3">
@@ -61,7 +79,11 @@ export default function Contact() {
                   id="phone"
                   type="tel"
                   placeholder="(123) 456-7890"
+                  value={phone}
                   data-sb-validations="required"
+                  onChange={(e) => {
+                    setPhone(e.target.value);
+                  }}
                 />
                 <label htmlFor="phone">Teléfono</label>
                 <div

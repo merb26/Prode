@@ -10,7 +10,10 @@ import AuthVerify from "../common/AuthVerify";
 import TokenServices from "../services/token.services";
 
 function Masthead() {
-  const userLogged = TokenServices.getLocalAccessToken(); //localStorage.getItem("accessToken");
+  //const userLogged = TokenServices.getLocalAccessToken(); //localStorage.getItem("accessToken");
+
+  //verify if actual token is expired
+  const userLogged = AuthVerify();
 
   const { state } = useLocation();
   let userId;
@@ -33,13 +36,11 @@ function Masthead() {
   const [teams, setTeams] = useState([]);
   const [matches, setMatches] = useState([]);
   const [groupMatches, setGroupMatches] = useState([]);
-
   const [getImg, setGetImg] = useState("");
 
   const getFlags = async (name) => {
     const flags = await fetch(urlFlags);
     const data = await flags.json();
-
     const list = Object.entries(data);
     const code = list.filter((flag) => flag[1] === name)[0][0];
 
@@ -91,7 +92,12 @@ function Masthead() {
 
   return userLogged ? (
     <>
-      <Navigation />
+      <Navigation
+        id={userId}
+        groupMatches={groupMatches}
+        teams={teams}
+        getImg={getImg}
+      />
       <header className="masthead">
         <div className="container px-4 px-lg-5 h-100">
           <div className="row gx-4 gx-lg-5 h-100 align-items-center justify-content-center text-center">
@@ -113,18 +119,17 @@ function Masthead() {
         </div>
         <div className="masthead">
           <div className="container px-4 px-lg-5 h-100">
-            <Pronostico
+            {/* <Pronostico
               id={userId}
               groupMatches={groupMatches}
               teams={teams}
               getImg={getImg}
-            />
+            /> */}
           </div>
         </div>
         <Fechas getImg={getImg} />
         <Contact />
-        {/* <Resultados id={userId} /> */}
-        <AuthVerify />
+        <Resultados id={userId} />
       </header>
     </>
   ) : (

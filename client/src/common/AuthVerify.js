@@ -21,7 +21,9 @@ const AuthVerify = (props) => {
       TokenServices.removeUser();
 
       navigate("/login");
+      return decodedJwt;
     }
+    return decodedJwt;
   }
 };
 

@@ -1,12 +1,19 @@
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useState } from "react";
+import { useLocation } from "react-router-dom";
 import "../App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Carousel from "react-bootstrap/Carousel";
-
-import "bootstrap/dist/css/bootstrap.min.css";
+import AuthVerify from "../common/AuthVerify";
+import Navigation from "./Navigation";
+import { Navigate } from "react-router-dom";
 
 export default function Pronostico(props) {
+  const userLogged = AuthVerify();
+
+  const location = useLocation();
+
+  const { id, groupMatches, teams, getImg } = location.state || {}; // empty object is to avoid destructuring of null error
+
   const [results, setResults] = useState([
     { goalHome: "", goalAway: "", matchId: "", homeTeam: "", awayTeam: "" },
   ]);
@@ -120,7 +127,7 @@ export default function Pronostico(props) {
             goalAway: aux[i].goalAway,
             homeTeam: aux[i],
             awayTeam: aux[i],
-            userId: props.id,
+            userId: /*props.*/ id,
           }),
         });
 
@@ -138,6 +145,7 @@ export default function Pronostico(props) {
 
   async function handleChange(e, i, id, home, away) {
     const { name, value } = e.target;
+    console.log(e.target.value);
 
     const list = [...results, {}];
 
@@ -155,23 +163,26 @@ export default function Pronostico(props) {
   }
 
   function carrouselElement(group) {
-    const groupX = props.groupMatches.filter(
+    const groupX = /*props.*/ groupMatches.filter(
       (matches) => matches.group === "GROUP_" + `${group}`
     );
 
     return (
-      props.teams &&
-      props.getImg &&
+      /*props.*/ teams &&
+      /*props.*/ getImg &&
       groupX.map((match, i) => (
         <li key={match.id} className="matches">
           <img
             className="home-img"
-            src={props.getImg
-              .filter((img) => img.id === match.homeTeam.id)
-              .map((url) => url.url)}
+            src={
+              /*props.*/ getImg
+                .filter((img) => img.id === match.homeTeam.id)
+                .map((url) => url.url)
+            }
           />
-          {match.homeTeam.name}
+          <h4>{match.homeTeam.name}</h4>
           <input
+            className="input-pronosticos"
             name="goalHome"
             value={results.goalHome}
             onChange={(e) =>
@@ -184,9 +195,19 @@ export default function Pronostico(props) {
               )
             }
           />
-          vs
-          {match.awayTeam.name}
+
+          <h4 className="vs-text">vs</h4>
+          <h4>{match.awayTeam.name}</h4>
+          <img
+            className="home-img"
+            src={
+              /*props.*/ getImg
+                .filter((img) => img.id === match.awayTeam.id)
+                .map((url) => url.url)
+            }
+          />
           <input
+            className="input-pronosticos"
             name="goalAway"
             value={results.goalAway}
             onChange={(e) =>
@@ -199,31 +220,30 @@ export default function Pronostico(props) {
               )
             }
           />
-          <img
-            className="home-img"
-            src={props.getImg
-              .filter((img) => img.id === match.awayTeam.id)
-              .map((url) => url.url)}
-          />
         </li>
       ))
     );
   }
 
-  return (
-    <>
+  return userLogged ? (
+    <header className="masthead">
+      <Navigation />
       <Carousel interval={null}>
         {groups.map((group) => (
           <Carousel.Item>
             <div className="containerCarrousel">
-              <ul>{carrouselElement(group)}</ul>
-              <button disabled={disable} onClick={handleSubmit}>
-                Enviar
-              </button>
+              <ul>
+                {carrouselElement(group)}{" "}
+                <button disabled={disable} onClick={handleSubmit}>
+                  Enviar
+                </button>
+              </ul>
             </div>
           </Carousel.Item>
         ))}
       </Carousel>
-    </>
+    </header>
+  ) : (
+    <Navigate to="/login" />
   );
 }

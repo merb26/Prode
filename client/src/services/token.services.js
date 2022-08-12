@@ -16,7 +16,6 @@ const getUser = () => {
   return JSON.parse(localStorage.getItem("user"));
 };
 const setUser = (user) => {
-  //console.log(JSON.stringify(user));
   localStorage.setItem("user", JSON.stringify(user));
 };
 const removeUser = () => {

@@ -54,7 +54,7 @@ const Resultados = (props) => {
     }
   }
 
-  console.log(Promise.all(evaluateResponse()));
+  //console.log(Promise.all(evaluateResponse()));
 
   return <div>{evaluateResponse}</div>;
 };

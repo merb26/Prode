@@ -54,13 +54,9 @@ export default function Login() {
       //POST to /signin
       const data = await authServices.login(email, password);
 
-      //console.log("LOGINDATA", data);
-
       if (data.isLogged && data.suscripcion === true && data.accessToken) {
-        const loged = await tokenAvailable();
-        //console.log(await loged);
-        //localStorage.token ? tokenAvailable() : console.log("NO HAY TOKEN");
-        navigate(`/masthead`, { state: { token: loged, id: data.id } });
+        //const loged = await tokenAvailable();
+        navigate(`/masthead`, { state: { /*token: loged, */ id: data.id } });
       } else if (data.isLogged && data.suscripcion === false) {
         navigate("/suscripcion", {
           state: { preference_id: data.preference_id },
