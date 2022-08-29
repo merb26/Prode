@@ -11,13 +11,11 @@ export default function Pronostico(props) {
   const userLogged = AuthVerify();
 
   const location = useLocation();
-
   const { id, groupMatches, teams, getImg } = location.state || {}; // empty object is to avoid destructuring of null error
 
   const [results, setResults] = useState([
     { goalHome: "", goalAway: "", matchId: "", homeTeam: "", awayTeam: "" },
   ]);
-
   const [test, setTest] = useState([
     { goalHome: "", goalAway: "", matchId: "", homeTeam: "", awayTeam: "" },
   ]);
@@ -171,73 +169,78 @@ export default function Pronostico(props) {
       /*props.*/ teams &&
       /*props.*/ getImg &&
       groupX.map((match, i) => (
-        <li key={match.id} className="matches">
-          <img
-            className="home-img"
-            src={
-              /*props.*/ getImg
-                .filter((img) => img.id === match.homeTeam.id)
-                .map((url) => url.url)
-            }
-          />
-          <h4>{match.homeTeam.name}</h4>
-          <input
-            className="input-pronosticos"
-            name="goalHome"
-            value={results.goalHome}
-            onChange={(e) =>
-              handleChange(
-                e,
-                i,
-                match.id,
-                match.homeTeam.name,
-                match.awayTeam.name
-              )
-            }
-          />
+        <>
+          <li key={match.id} className="matches">
+            <img
+              className="home-img"
+              src={
+                /*props.*/ getImg
+                  .filter((img) => img.id === match.homeTeam.id)
+                  .map((url) => url.url)
+              }
+            />
+            <h4>{match.homeTeam.name}</h4>
+            <input
+              className="input-pronosticos"
+              name="goalHome"
+              value={results.goalHome}
+              onChange={(e) =>
+                handleChange(
+                  e,
+                  i,
+                  match.id,
+                  match.homeTeam.name,
+                  match.awayTeam.name
+                )
+              }
+            />
 
-          <h4 className="vs-text">vs</h4>
-          <h4>{match.awayTeam.name}</h4>
-          <img
-            className="home-img"
-            src={
-              /*props.*/ getImg
-                .filter((img) => img.id === match.awayTeam.id)
-                .map((url) => url.url)
-            }
-          />
-          <input
-            className="input-pronosticos"
-            name="goalAway"
-            value={results.goalAway}
-            onChange={(e) =>
-              handleChange(
-                e,
-                i,
-                match.id,
-                match.homeTeam.name,
-                match.awayTeam.name
-              )
-            }
-          />
-        </li>
+            <h4 className="vs-text">vs</h4>
+            <h4>{match.awayTeam.name}</h4>
+            <img
+              className="home-img"
+              src={
+                /*props.*/ getImg
+                  .filter((img) => img.id === match.awayTeam.id)
+                  .map((url) => url.url)
+              }
+            />
+            <input
+              className="input-pronosticos"
+              name="goalAway"
+              value={results.goalAway}
+              onChange={(e) =>
+                handleChange(
+                  e,
+                  i,
+                  match.id,
+                  match.homeTeam.name,
+                  match.awayTeam.name
+                )
+              }
+            />
+          </li>
+        </>
       ))
     );
   }
 
-  return userLogged ? (
+  return userLogged && groupMatches ? (
     <header className="masthead">
-      <Navigation />
+      <Navigation
+        id={userLogged.id}
+        groupMatches={groupMatches}
+        teams={teams}
+        getImg={getImg}
+      />
       <Carousel interval={null}>
         {groups.map((group) => (
           <Carousel.Item>
             <div className="containerCarrousel">
-              <ul>
-                {carrouselElement(group)}{" "}
-                <button disabled={disable} onClick={handleSubmit}>
-                  Enviar
-                </button>
-              </ul>
+              <ul>{carrouselElement(group)}</ul>
+              <button disabled={disable} onClick={handleSubmit}>
+                Enviar
+              </button>
             </div>
           </Carousel.Item>
         ))}

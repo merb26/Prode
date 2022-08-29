@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useSearchParams, Navigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import "../App.css";
 import authServices from "../services/auth.services";
 import axios from "axios";
@@ -44,7 +44,7 @@ export default function Login() {
     const userLogged = await UserService.getUserLogged();
 
     setUser(await userLogged.data);
-    //console.log(userLogged.data);
+
     return userLogged.data;
   }
 

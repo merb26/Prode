@@ -23,8 +23,8 @@ const Users = db.define("users", {
 
 const Pronostico = db.define("pronosticos", {
   matchId: {
-    type: DataTypes.STRING,
-    unique: true,
+    type: DataTypes.INTEGER,
+    unique: false,
   },
   winner: {
     type: DataTypes.STRING,

@@ -1,10 +1,17 @@
 import "../App.css";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { Link, Navigate, useNavigate, useLocation } from "react-router-dom";
 import TokenServices from "../services/token.services";
 
-function Navigation(props) {
+function Navigation({ id, groupMatches, teams, getImg }) {
   const userLogged = TokenServices.getLocalAccessToken; //localStorage.getItem("accessToken");
   const navigate = useNavigate();
+
+  const location = useLocation();
+
+  console.log("PROPR_NAVIGATION", id);
+
+  //const { id, groupMatches, teams, getImg } = location.state || {};
+  //console.log("PROPS", getImg);
 
   const handleLogOut = () => {
     TokenServices.removeUser();
@@ -37,7 +44,15 @@ function Navigation(props) {
                 <a className="nav-link" /*href="#about"*/>Reglas</a>
               </li>
               <li className="nav-item">
-                <Link to="/resultados">
+                <Link
+                  to="/resultados"
+                  state={{
+                    id,
+                    groupMatches,
+                    teams,
+                    getImg,
+                  }}
+                >
                   <a className="nav-link" /*href="#services"*/>Resultados</a>
                 </Link>
               </li>
@@ -51,10 +66,10 @@ function Navigation(props) {
                 <Link
                   to="/pronosticos"
                   state={{
-                    id: props.id,
-                    groupMatches: props.groupMatches,
-                    teams: props.teams,
-                    getImg: props.getImg,
+                    id,
+                    groupMatches,
+                    teams,
+                    getImg,
                   }}
                 >
                   <a className="nav-link" /*href="#services"*/>Pronosticos</a>

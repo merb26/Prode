@@ -90,10 +90,10 @@ function Masthead() {
     fetchTeams();
   }, []);
 
-  return userLogged ? (
+  return userLogged && groupMatches ? (
     <>
       <Navigation
-        id={userId}
+        id={userLogged.id}
         groupMatches={groupMatches}
         teams={teams}
         getImg={getImg}
@@ -129,7 +129,6 @@ function Masthead() {
         </div>
         <Fechas getImg={getImg} />
         <Contact />
-        <Resultados id={userId} />
       </header>
     </>
   ) : (
