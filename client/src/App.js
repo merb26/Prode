@@ -16,7 +16,7 @@ function App() {
         <Router>
           <Routes>
             <Route path="/login" element={<Login />} />
-            <Route exact path={`/masthead`} element={<Masthead />} />
+            <Route exact path={`/`} element={<Masthead />} />
             <Route exact path="/resultados" element={<Resultados />} />
             <Route exact path="/registro" element={<Registration />} />
             <Route exact path="/suscripcion" element={<Suscripcion />} />

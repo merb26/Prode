@@ -56,7 +56,7 @@ export default function Login() {
 
       if (data.isLogged && data.suscripcion === true && data.accessToken) {
         //const loged = await tokenAvailable();
-        navigate(`/masthead`, { state: { /*token: loged, */ id: data.id } });
+        navigate(`/`, { state: { /*token: loged, */ id: data.id } });
       } else if (data.isLogged && data.suscripcion === false) {
         navigate("/suscripcion", {
           state: { preference_id: data.preference_id },

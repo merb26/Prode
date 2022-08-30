@@ -11,8 +11,8 @@ require("./middlewares/verifySignUp");
 
 // const ACCESS_TOKEN = "TEST-f5ddaa57-7f70-451f-b329-2c430b78ac8f";
 
-// const ACCESS_TOKEN_PRUEBA =
-//   "TEST-4192509694015148-052021-bba601e9fc2caf5e23355ccae89314a3-1127476200";
+const ACCESS_TOKEN_PRUEBA =
+  "TEST-4192509694015148-052021-bba601e9fc2caf5e23355ccae89314a3-1127476200";
 
 //ROUTES
 require("../server/routes/auth.routes")(app);
@@ -54,7 +54,7 @@ app.post("/contact", async (req, res) => {
 });
 
 //MP INTEGRATION
-mercadopago.configure({ access_token: process.env.ACCESS_TOKEN_PRUEBA });
+mercadopago.configure({ access_token: ACCESS_TOKEN_PRUEBA });
 
 app.post("/api/orders", (req, res) => {
   const preference = {

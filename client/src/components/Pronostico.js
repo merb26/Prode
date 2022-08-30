@@ -229,6 +229,7 @@ export default function Pronostico(props) {
     <header className="masthead">
       <Navigation
         id={userLogged.id}
+        userInfo={userLogged}
         groupMatches={groupMatches}
         teams={teams}
         getImg={getImg}
@@ -237,6 +238,9 @@ export default function Pronostico(props) {
         {groups.map((group) => (
           <Carousel.Item>
             <div className="containerCarrousel">
+              <h2>
+                {"GRUPO"} {group}
+              </h2>
               <ul>{carrouselElement(group)}</ul>
               <button disabled={disable} onClick={handleSubmit}>
                 Enviar

@@ -14,6 +14,7 @@ function Masthead() {
 
   //verify if actual token is expired
   const userLogged = AuthVerify();
+  console.log(userLogged);
 
   const { state } = useLocation();
   let userId;
@@ -94,6 +95,7 @@ function Masthead() {
     <>
       <Navigation
         id={userLogged.id}
+        userInfo={userLogged}
         groupMatches={groupMatches}
         teams={teams}
         getImg={getImg}
@@ -127,7 +129,6 @@ function Masthead() {
             /> */}
           </div>
         </div>
-        <Fechas getImg={getImg} />
         <Contact />
       </header>
     </>

@@ -1,17 +1,10 @@
 import "../App.css";
-import { Link, Navigate, useNavigate, useLocation } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import TokenServices from "../services/token.services";
 
-function Navigation({ id, groupMatches, teams, getImg }) {
+function Navigation({ id, groupMatches, teams, getImg, userInfo }) {
   const userLogged = TokenServices.getLocalAccessToken; //localStorage.getItem("accessToken");
   const navigate = useNavigate();
-
-  const location = useLocation();
-
-  console.log("PROPR_NAVIGATION", id);
-
-  //const { id, groupMatches, teams, getImg } = location.state || {};
-  //console.log("PROPS", getImg);
 
   const handleLogOut = () => {
     TokenServices.removeUser();
@@ -26,7 +19,9 @@ function Navigation({ id, groupMatches, teams, getImg }) {
         id="mainNav"
       >
         <div className="container px-4 px-lg-5">
-          <a className="navbar-brand" /*href="#page-top"*/>PRODE SECCO</a>
+          <a className="navbar-brand" /*href="#page-top"*/>
+            {userInfo.name} {userInfo.lastname}
+          </a>
           <button
             className="navbar-toggler navbar-toggler-right"
             type="button"
@@ -40,6 +35,11 @@ function Navigation({ id, groupMatches, teams, getImg }) {
           </button>
           <div className="collapse navbar-collapse" id="navbarResponsive">
             <ul className="navbar-nav ms-auto my-2 my-lg-0">
+              <li className="nav-item">
+                <Link to="/">
+                  <a className="nav-link" /*href="#services"*/>Home</a>
+                </Link>
+              </li>
               <li className="nav-item">
                 <a className="nav-link" /*href="#about"*/>Reglas</a>
               </li>
@@ -57,11 +57,22 @@ function Navigation({ id, groupMatches, teams, getImg }) {
                 </Link>
               </li>
               <li className="nav-item">
-                <a className="nav-link" /*href="#portfolio"*/>Fechas</a>
+                <Link
+                  to="/fechas"
+                  state={{
+                    id,
+                    groupMatches,
+                    teams,
+                    getImg,
+                  }}
+                >
+                  <a className="nav-link" /*href="#portfolio"*/>Fechas</a>
+                </Link>
               </li>
               <li className="nav-item">
                 <a className="nav-link" /*href="#contact"*/>Contacto</a>
               </li>
+
               <li className="nav-item">
                 <Link
                   to="/pronosticos"
