@@ -149,13 +149,7 @@ const Resultados = (props) => {
   return userLogged ? (
     table && users && loading && loading2 && (
       <header className="masthead">
-        <Navigation
-          id={userLogged.id}
-          userInfo={userLogged}
-          groupMatches={groupMatches}
-          teams={teams}
-          getImg={getImg}
-        />
+        <Navigation />
         <table className="table">
           <thead>
             <tr>

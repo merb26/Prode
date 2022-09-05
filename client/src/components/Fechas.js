@@ -38,14 +38,8 @@ export default function Fechas(props) {
   return userLogged ? (
     today && (
       <header className="masthead">
+        <Navigation />
         <div className="container px-4 px-lg-5 h-100">
-          <Navigation
-            id={userLogged.id}
-            userInfo={userLogged}
-            groupMatches={groupMatches}
-            teams={teams}
-            getImg={getImg}
-          />
           <h2 className="mt-0">
             Today´s Match:
             {<span>{moment(today[0].utcDate).format(" MMM d, yyyy")}</span>}

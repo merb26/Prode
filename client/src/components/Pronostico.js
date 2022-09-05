@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { useLocation } from "react-router-dom";
 import "../App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -6,12 +6,14 @@ import Carousel from "react-bootstrap/Carousel";
 import AuthVerify from "../common/AuthVerify";
 import Navigation from "./Navigation";
 import { Navigate } from "react-router-dom";
+import { UserContext } from "./Context";
 
 export default function Pronostico(props) {
   const userLogged = AuthVerify();
 
-  const location = useLocation();
-  const { id, groupMatches, teams, getImg } = location.state || {}; // empty object is to avoid destructuring of null error
+  //const location = useLocation();
+  //const { id, groupMatches, teams, getImg } = location.state || {}; // empty object is to avoid destructuring of null error
+  const { id, teams, groupMatches, getImg } = useContext(UserContext);
 
   const [results, setResults] = useState([
     { goalHome: "", goalAway: "", matchId: "", homeTeam: "", awayTeam: "" },
@@ -125,7 +127,7 @@ export default function Pronostico(props) {
             goalAway: aux[i].goalAway,
             homeTeam: aux[i],
             awayTeam: aux[i],
-            userId: /*props.*/ id,
+            userId: /*props.*/ id || userLogged.id,
           }),
         });
 
@@ -227,13 +229,7 @@ export default function Pronostico(props) {
 
   return userLogged && groupMatches ? (
     <header className="masthead">
-      <Navigation
-        id={userLogged.id}
-        userInfo={userLogged}
-        groupMatches={groupMatches}
-        teams={teams}
-        getImg={getImg}
-      />
+      <Navigation />
       <Carousel interval={null}>
         {groups.map((group) => (
           <Carousel.Item>
