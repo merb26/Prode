@@ -1,0 +1,29 @@
+.carrusel {
+  color: aliceblue;
+  height: 600px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.paisesIzquierda {
+  width: 100%;
+  display: flex;
+  justify-content: end;
+}
+
+.paisesDerecha {
+  width: 100%;
+  display: flex;
+  justify-content: start;
+}
+
+.cajaBoton {
+  display: flex;
+  justify-content: center;
+}
+
+.btnEnviar {
+  font-size: 23px !important;
+  border-width: 2px !important;
+}

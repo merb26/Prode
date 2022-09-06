@@ -16,6 +16,16 @@ export default function Registration() {
     e.preventDefault();
 
     try {
+      // const signUp = await fetch("http://localhost:3000/signup", {
+      //   method: "POST",
+      //   made: "cors",
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //     "Access-Control-Allow-Origin": "*",
+      //   },
+      //   body: JSON.stringify({ name, lastname, sector, email, password }),
+      // });
+
       const signUp = await authServices.signup(
         name,
         lastname,
@@ -24,6 +34,8 @@ export default function Registration() {
         password
       );
 
+      console.log(signUp);
+      console.log(typeof signUp);
       if (!signUp.used) {
         console.log("usuario nuevo");
         navigate("/suscripcion", {

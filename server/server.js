@@ -1,18 +1,37 @@
 require("dotenv").config();
+const morgan = require("morgan");
+const express = require("express");
+const cors = require("cors");
+const cookieSession = require("cookie-session");
 const mercadopago = require("mercadopago");
 const PORT = process.env.PORT || 3000;
 const db = require("./models/index");
 const { Users, Pronostico } = require("./models/models");
-//const emailSender = require("./controllers/contact.controller");
-const app = require("./app");
+const emailSender = require("./controllers/contact.controller");
+const app = express();
 
 require("../server/middlewares/authJwt");
 require("./middlewares/verifySignUp");
 
-// const ACCESS_TOKEN = "TEST-f5ddaa57-7f70-451f-b329-2c430b78ac8f";
+const ACCESS_TOKEN = "TEST-f5ddaa57-7f70-451f-b329-2c430b78ac8f";
 
 const ACCESS_TOKEN_PRUEBA =
   "TEST-4192509694015148-052021-bba601e9fc2caf5e23355ccae89314a3-1127476200";
+
+//MIDDLEWARES
+app.use(
+  cookieSession({
+    name: "prode_session",
+    secret: "MIOURI_PRODE_SECRET", //add to .env variable
+    httpOnly: false,
+  })
+);
+app.use(cors());
+app.use(morgan("dev"));
+app.use(express.json());
+app.options("/*", (_, res) => {
+  res.sendStatus(200);
+});
 
 //ROUTES
 require("../server/routes/auth.routes")(app);
@@ -39,7 +58,7 @@ app.get("/pronosticos", async (req, res) => {
     const usersPronostico = await Pronostico.findAll();
     res.send(usersPronostico);
   } catch (error) {
-    console.log("ERROR en GET /pronosticos", error.message);
+    console.log(error);
   }
 });
 

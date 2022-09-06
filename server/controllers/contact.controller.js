@@ -34,4 +34,4 @@ async function main(name, email, textarea) {
 
 main().catch(console.error);
 
-//module.exports = { main };
+module.exports = { main };
